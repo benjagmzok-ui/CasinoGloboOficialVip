@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MASTER PANEL - GLOBO VIP</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body { background: #050505; color: white; font-family: sans-serif; padding: 20px; text-align: center; }
+        .user-card { background: #111; padding: 20px; margin: 10px auto; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #222; max-width: 600px; }
+        input { padding: 12px; border-radius: 8px; border: 1px solid #333; background: #000; color: #00ff00; font-weight: bold; }
+        button { background: #d4af37; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; color: black; }
+        #panel-control { display: none; } /* Oculto por defecto */
+        #login-admin { margin-top: 100px; }
+    </style>
+</head>
+<body>
+
+    <div id="login-admin">
+        <h1 style="color: #d4af37;">ACCESO ADMINISTRADOR</h1>
+        <input type="password" id="passInput" placeholder="Contraseña de Admin">
+        <button onclick="verificar()">ENTRAR AL PANEL</button>
+    </div>
+
+    <div id="panel-control">
+        <h1 style="color: #d4af37;">CONTROL DE JUGADORES</h1>
+        <p>Gestiona los saldos en tiempo real</p>
+        <hr border="1" color="#222">
+        <div id="lista">Buscando registros...</div>
+    </div>
+
+    <script>
+        // Tu configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyADFLPl2MSMaIygi80cXERqpOx86PBVpgs",
+            authDomain: "casino-globo.firebaseapp.com",
+            databaseURL: "https://casino-globo-default-rtdb.firebaseio.com",
+            projectId: "casino-globo",
+            storageBucket: "casino-globo.firebasestorage.app",
+            messagingSenderId: "522798413276",
+            appId: "1:522798413276:web:0ec75ba59c8769a51b0b19"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Función para la contraseña
+        function verificar() {
+            const pass = document.getElementById('passInput').value;
+            if(pass === "elnoba1212") {
+                document.getElementById('login-admin').style.display = 'none';
+                document.getElementById('panel-control').style.display = 'block';
+                cargarUsuarios();
+            } else {
+                alert("Contraseña incorrecta");
+            }
+        }
+
+        function cargarUsuarios() {
+            db.ref('usuarios').on('value', (snap) => {
+                const lista = document.getElementById('lista');
+                lista.innerHTML = "";
+                snap.forEach((user) => {
+                    const nombre = user.key;
+                    const saldo = user.val().saldo;
+                    lista.innerHTML += `
+                        <div class="user-card">
+                            <div style="text-align: left;">
+                                <b style="color: #d4af37; font-size: 1.2rem;">${nombre}</b><br>
+                                <span>Saldo actual: $${saldo}</span>
+                            </div>
+                            <div>
+                                <input type="number" id="monto-${nombre}" placeholder="Monto" style="width: 100px;">
+                                <button onclick="actualizar('${nombre}')">CARGAR</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function actualizar(usuario) {
+            const nuevoSaldo = document.getElementById('monto-' + usuario).value;
+            if(nuevoSaldo === "") return alert("Ingresa un monto");
+            
+            db.ref('usuarios/' + usuario).update({
+                saldo: parseInt(nuevoSaldo)
+            });
+            alert("Saldo de " + usuario + " actualizado a $" + nuevoSaldo);
+        }
+    </script>
+</body>
+</html>
