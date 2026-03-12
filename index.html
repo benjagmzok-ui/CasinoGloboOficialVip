@@ -6,19 +6,13 @@
     <title>GLOBO VIP - ELITE</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root { --oro: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%); }
         body { background: #000; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
         
+        /* Contenedores */
         .pantalla { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         .activa { display: flex; }
 
-        /* Contenedor Principal */
-        .caja-vip { background: #111; padding: 30px; border-radius: 20px; border: 1px solid #222; width: 100%; max-width: 360px; box-shadow: 0 15px 35px rgba(0,0,0,0.9); }
-        .titulo { font-size: 2.8rem; font-weight: 900; margin: 0; background: var(--oro); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
-        
-        input { width: 100%; padding: 15px; margin: 8px 0; border-radius: 12px; border: 1px solid #333; background: #050505; color: white; text-align: center; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
-        input:focus { border-color: #d4af37; box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
-        
-        .btn-oro { background: var(--oro); color: black; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 15px; font-size: 1rem; box-shadow: 0 4px 15
+        /* Caja de Login y Registro */
+        .caja-vip { background: #111; padding: 30px; border-radius: 20px; border: 1px solid #222; width: 100%; max-width: 3
