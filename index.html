@@ -6,130 +6,107 @@
     <title>Casino Globo Oficial VIP</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        /* Estilo General - Lujo */
-        body { background: radial-gradient(circle, #1a1c23 0%, #07080a 100%); color: #fff; font-family: 'Roboto', sans-serif; margin: 0; min-height: 100vh; overflow-x: hidden; }
+        :root { --oro: #d4af37; --oro-brillante: #f9f295; --fondo: #0c0e12; }
+        body { background: var(--fondo); color: white; font-family: 'Roboto', sans-serif; margin: 0; overflow: hidden; height: 100vh; }
         
-        /* Cabecera Profesional */
-        .casino-header { background: rgba(0,0,0,0.8); padding: 25px; border-bottom: 2px solid #d4af37; box-shadow: 0 5px 20px rgba(212,175,55,0.4); }
-        .casino-title { font-family: 'Bebas Neue', cursive; font-size: 3.2em; color: #d4af37; margin: 0; letter-spacing: 2px; }
-        .saldo-display { color: #00ff00; font-size: 1.5em; font-weight: bold; margin-top: 5px; text-shadow: 0 0 10px rgba(0,255,0,0.3); }
+        /* Contenedores de Secciones */
+        .seccion { display: none; height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 0; left: 0; }
+        .activa { display: flex; animation: fadeIn 0.5s ease; }
 
-        /* El Globo VIP */
-        .game-area { padding: 40px 20px; }
-        .globo-wrapper { width: 160px; height: 160px; margin: 0 auto; cursor: pointer; transition: transform 0.1s ease-out; position: relative; }
-        .globo-diseno { width: 100%; height: 100%; background: radial-gradient(circle at 30% 30%, #ff4d4d, #b30000); border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; box-shadow: 0 15px 35px rgba(255,0,0,0.4), inset -10px -10px 20px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.1); }
-        
-        /* Mensajes de Juego */
-        #msg-juego { color: #d4af37; font-size: 1.4em; margin-top: 20px; font-weight: bold; text-transform: uppercase; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Formulario de Registro Profesional */
-        .registro-card { background: #15181f; border: 1px solid #2a2e38; border-radius: 20px; padding: 30px; max-width: 340px; margin: 40px auto; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
-        .registro-card h3 { color: #d4af37; margin-bottom: 20px; font-family: 'Bebas Neue'; font-size: 2em; }
-        .input-group { margin-bottom: 15px; text-align: left; }
-        input { width: 100%; padding: 14px; background: #0a0c10; border: 1px solid #3d424d; border-radius: 8px; color: #fff; box-sizing: border-box; transition: 0.3s; }
-        input:focus { border-color: #d4af37; outline: none; box-shadow: 0 0 8px rgba(212,175,55,0.4); }
-        
-        /* Botón de Acción */
-        .btn-vip { background: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%); color: #000; border: none; padding: 16px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 1.1em; text-transform: uppercase; margin-top: 10px; transition: 0.2s; }
-        .btn-vip:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(212,175,55,0.4); }
+        /* 1. SECCIÓN REGISTRO */
+        .logo-casino { font-family: 'Bebas Neue'; font-size: 3.5em; color: var(--oro); text-shadow: 0 0 15px rgba(212,175,55,0.5); margin-bottom: 10px; }
+        .card-registro { background: #1a1d24; border: 1px solid #333; padding: 40px 30px; border-radius: 20px; box-shadow: 0 10px 50px rgba(0,0,0,0.7); width: 85%; max-width: 350px; text-align: center; }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #07080a; border: 1px solid var(--oro); border-radius: 10px; color: white; box-sizing: border-box; font-size: 16px; }
+        .btn-principal { background: linear-gradient(135deg, var(--oro), var(--oro-brillante), var(--oro)); border: none; padding: 18px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 15px; font-size: 1.1em; }
 
-        /* Modal / Cartel Personalizado (Evita el blanco feo) */
-        .modal-custom { display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1c23; border: 2px solid #d4af37; padding: 25px; border-radius: 15px; z-index: 1000; box-shadow: 0 0 100px rgba(0,0,0,0.9); width: 80%; max-width: 300px; }
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 999; }
+        /* 2. PANTALLA DE CARGA */
+        .loader { border: 5px solid #222; border-top: 5px solid var(--oro); border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .progreso-txt { margin-top: 20px; font-family: 'Bebas Neue'; letter-spacing: 2px; color: var(--oro); }
 
-        /* Panel Admin Oculto */
-        #admin-box { display: none; background: #222; border: 1px dashed #d4af37; padding: 20px; margin: 20px auto; max-width: 300px; }
+        /* 3. SECCIÓN JUEGO */
+        .interfaz-juego { width: 100%; position: absolute; top: 0; padding: 20px; box-sizing: border-box; display: flex; justify-content: space-between; background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--oro); }
+        #saldo-txt { color: #00ff00; font-weight: bold; font-size: 1.4em; }
+        .globo-game { width: 180px; height: 180px; background: radial-gradient(circle at 30% 30%, #ff4d4d, #900); border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; cursor: pointer; transition: transform 0.1s; box-shadow: 0 10px 30px rgba(255,0,0,0.5); }
+        #multi-txt { font-size: 3em; font-family: 'Bebas Neue'; color: var(--oro); margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="casino-header">
-        <h1 class="casino-title">CASINO GLOBO VIP 🎈</h1>
-        <div class="saldo-display">SALDO: $<span id="saldo-val">0.00</span></div>
-    </div>
-
-    <div class="game-area">
-        <div class="globo-wrapper" id="globo-cont" onclick="inflar()">
-            <div class="globo-diseno"></div>
-        </div>
-        <p id="msg-juego">¡Toca para ganar!</p>
-        <p id="multiplicador" style="color:#888;">Multiplicador: x1.00</p>
-
-        <div class="registro-card">
-            <h3>REGISTRO OFICIAL</h3>
-            <div class="input-group">
-                <input type="text" id="user-name" placeholder="Nombre de usuario">
-            </div>
-            <div class="input-group">
-                <input type="password" id="user-pass" placeholder="Contraseña de retiro">
-            </div>
-            <button class="btn-vip" onclick="mostrarModal()">REGISTRAR Y COBRAR</button>
+    <div id="paso-registro" class="seccion activa">
+        <h1 class="logo-casino">CASINO GLOBO VIP</h1>
+        <div class="card-registro">
+            <h2 style="margin-top:0; font-size: 1.2em; color: #888;">INICIAR SESIÓN</h2>
+            <input type="text" id="u" placeholder="Usuario / Correo">
+            <input type="password" id="p" placeholder="Contraseña">
+            <button class="btn-principal" onclick="irACarga()">ENTRAR AL CASINO</button>
         </div>
     </div>
 
-    <div class="modal-overlay" id="overlay"></div>
-    <div class="modal-custom" id="modal">
-        <h3 style="color:#d4af37; margin-top:0;">SISTEMA VIP</h3>
-        <p id="modal-text">Procesando solicitud...</p>
-        <button class="btn-vip" onclick="cerrarModal()" style="padding:10px;">ACEPTAR</button>
+    <div id="paso-carga" class="seccion">
+        <div class="loader"></div>
+        <p class="progreso-txt" id="estado-carga">CONECTANDO AL SERVIDOR...</p>
     </div>
 
-    <footer style="margin-bottom: 30px;">
-        <p onclick="activarAdmin()" style="color: #222; cursor: default; font-size: 0.8em;">CONEXIÓN SEGURA SSL: 1,402 ONLINE</p>
-    </footer>
-
-    <div id="admin-box">
-        <h3 style="color:gold;">PANEL DE CONTROL</h3>
-        <input type="number" id="input-saldo" placeholder="Monto">
-        <button class="btn-vip" onclick="aplicarSaldo()">CARGAR</button>
+    <div id="paso-juego" class="seccion">
+        <div class="interfaz-juego">
+            <span style="font-family: 'Bebas Neue'; color: var(--oro);">VIP PLAYER</span>
+            <span id="saldo-txt">$<span id="val-s">0.00</span></span>
+        </div>
+        
+        <div id="globo" class="globo-game" onclick="inflar()"></div>
+        <div id="multi-txt">x1.00</div>
+        <p id="hint" style="color: #666;">¡Toca el globo para multiplicar!</p>
+        
+        <button class="btn-principal" style="width: 200px;" onclick="location.reload()">COBRAR Y SALIR</button>
     </div>
 
     <script>
-        let clicks = 0; let m = 1.0; let adminCount = 0;
+        let s = 0; let m = 1.0; let c = 0;
+
+        function irACarga() {
+            // Validar que no estén vacíos
+            if(document.getElementById('u').value == "" || document.getElementById('p').value == "") {
+                alert("Por favor ingrese sus datos"); return;
+            }
+            
+            // Cambiar de sección
+            document.getElementById('paso-registro').classList.remove('activa');
+            document.getElementById('paso-carga').classList.add('activa');
+
+            // Simular carga profesional
+            let estados = ["VERIFICANDO CUENTA...", "CARGANDO MOTOR GRÁFICO...", "SINCRONIZANDO SALDO...", "¡LISTO!"];
+            let i = 0;
+            let intervalo = setInterval(() => {
+                document.getElementById('estado-carga').innerText = estados[i];
+                i++;
+                if(i >= estados.length) {
+                    clearInterval(intervalo);
+                    setTimeout(iniciarJuego, 500);
+                }
+            }, 1000);
+        }
+
+        function iniciarJuego() {
+            document.getElementById('paso-carga').classList.remove('activa');
+            document.getElementById('paso-juego').classList.add('activa');
+        }
 
         function inflar() {
-            clicks++;
-            m += 0.45;
-            let scale = 1 + (clicks * 0.15);
-            document.getElementById('globo-cont').style.transform = `scale(${scale})`;
-            document.getElementById('multiplicador').innerText = "Multiplicador: x" + m.toFixed(2);
-            
-            if(Math.random() < 0.08 && clicks > 3) {
-                document.getElementById('globo-cont').style.transform = "scale(0)";
-                document.getElementById('msg-juego').innerText = "¡BOOM! EXPLOTÓ";
-                document.getElementById('msg-juego').style.color = "red";
-                setTimeout(() => {
-                    clicks = 0; m = 1.0;
-                    document.getElementById('globo-cont').style.transform = "scale(1)";
-                    document.getElementById('msg-juego').innerText = "¡TOCA PARA GANAR!";
-                    document.getElementById('msg-juego').style.color = "#d4af37";
-                    document.getElementById('multiplicador').innerText = "Multiplicador: x1.00";
-                }, 1500);
+            c++;
+            m += 0.25;
+            let esc = 1 + (c * 0.1);
+            document.getElementById('globo').style.transform = `scale(${esc})`;
+            document.getElementById('multi-txt').innerText = "x" + m.toFixed(2);
+
+            // Probabilidad de explosión real
+            if(Math.random() < (c * 0.05) && c > 5) {
+                document.getElementById('globo').style.transform = "scale(0)";
+                alert("¡BOOM! El globo explotó. Suerte la próxima.");
+                location.reload();
             }
-        }
-
-        function mostrarModal() {
-            document.getElementById('overlay').style.display = "block";
-            document.getElementById('modal').style.display = "block";
-            document.getElementById('modal-text').innerText = "Error de sincronización con el servidor de pagos. Su cuenta ha sido vinculada, intente el cobro en 24 horas.";
-        }
-
-        function cerrarModal() {
-            document.getElementById('overlay').style.display = "none";
-            document.getElementById('modal').style.display = "none";
-        }
-
-        function activarAdmin() {
-            adminCount++;
-            if(adminCount >= 5) {
-                document.getElementById('admin-box').style.display = "block";
-                alert("Panel Admin Desbloqueado");
-            }
-        }
-
-        function aplicarSaldo() {
-            let val = document.getElementById('input-saldo').value;
-            document.getElementById('saldo-val').innerText = parseFloat(val).toFixed(2);
         }
     </script>
 </body>
