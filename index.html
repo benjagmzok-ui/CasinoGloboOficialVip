@@ -3,98 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GLOBO VIP - Oficial</title>
+    <title>GLOBO VIP - ELITE</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root { --oro: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%); }
-        body { background: #000; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; overflow: hidden; }
+        body { background: #000; color: white; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
         
-        /* Contenedores de pantalla */
         .pantalla { display: none; min-height: 100vh; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; }
         .activa { display: flex; }
 
-        /* Estilo Login Profesional */
-        .caja-vip { background: #111; padding: 35px; border-radius: 25px; border: 1px solid #222; width: 100%; max-width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        .logo-oro { font-size: 2.5rem; font-weight: bold; margin: 0; background: var(--oro); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        /* Contenedor Principal */
+        .caja-vip { background: #111; padding: 30px; border-radius: 20px; border: 1px solid #222; width: 100%; max-width: 360px; box-shadow: 0 15px 35px rgba(0,0,0,0.9); }
+        .titulo { font-size: 2.8rem; font-weight: 900; margin: 0; background: var(--oro); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
         
-        input { width: 100%; padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid #333; background: #000; color: white; text-align: center; font-size: 1rem; box-sizing: border-box; }
-        .btn-oro { background: var(--oro); color: black; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 10px; }
-
-        /* Estilo Juego */
-        header { width: 100%; padding: 20px; position: fixed; top: 0; display: flex; justify-content: space-between; box-sizing: border-box; background: rgba(0,0,0,0.9); border-bottom: 1px solid #222; z-index: 10; }
-        .stat-label { font-size: 0.7rem; color: #888; text-transform: uppercase; display: block; }
-        .stat-val { font-weight: bold; font-size: 1.1rem; }
-
-        .globo-container { position: relative; width: 200px; height: 250px; margin: 40px auto; display: flex; align-items: center; justify-content: center; }
-        .globo { width: 160px; height: 190px; background: radial-gradient(circle at 30% 30%, #ff4d4d, #800); border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%; box-shadow: 0 15px 35px rgba(255,0,0,0.3); animation: flotar 3s ease-in-out infinite; }
+        input { width: 100%; padding: 15px; margin: 8px 0; border-radius: 12px; border: 1px solid #333; background: #050505; color: white; text-align: center; font-size: 1rem; box-sizing: border-box; outline: none; transition: 0.3s; }
+        input:focus { border-color: #d4af37; box-shadow: 0 0 10px rgba(212, 175, 55, 0.2); }
         
-        @keyframes flotar { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-
-        .btn-whatsapp { background: #25d366; color: white; border: none; padding: 15px 30px; border-radius: 50px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 20px; box-shadow: 0 5px 15px rgba(37,211,102,0.3); }
-    </style>
-</head>
-<body>
-
-    <div id="p-login" class="pantalla activa">
-        <div class="caja-vip">
-            <h1 class="logo-oro">GLOBO VIP</h1>
-            <p style="color: #666; font-size: 0.8rem; margin-bottom: 20px;">ACCESO EXCLUSIVO A JUGADORES</p>
-            <input type="text" id="userInput" placeholder="Nombre de Usuario">
-            <input type="password" id="passInput" placeholder="Contraseña">
-            <button class="btn-oro" onclick="entrarAlSistema()">ACCEDER AHORA</button>
-            <p style="color: #d4af37; font-size: 0.7rem; margin-top: 20px;">PROTECCIÓN DE DATOS NIVEL BANCARIO</p>
-        </div>
-    </div>
-
-    <div id="p-juego" class="pantalla">
-        <header>
-            <div style="text-align: left;">
-                <span class="stat-label">Jugador</span>
-                <span id="displayNombre" class="stat-val" style="color: #d4af37;">---</span>
-            </div>
-            <div style="text-align: right;">
-                <span class="stat-label">Saldo Disponible</span>
-                <span class="stat-val" style="color: #00ff00;">$<span id="saldo">0</span></span>
-            </div>
-        </header>
-
-        <div class="globo-container">
-            <div class="globo"></div>
-        </div>
-
-        <h2 style="margin: 0; font-size: 1.8rem;">¡BUENA SUERTE! 🍀</h2>
-        <p style="color: #888; margin: 10px 0;">Recargas rápidas vía WhatsApp</p>
-        
-        <a href="https://wa.me/3364546172" class="btn-whatsapp">CARGAR SALDO AQUÍ</a>
-    </div>
-
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyADFLPl2MSMaIygi80cXERqpOx86PBVpgs",
-            authDomain: "casino-globo.firebaseapp.com",
-            databaseURL: "https://casino-globo-default-rtdb.firebaseio.com",
-            projectId: "casino-globo",
-            storageBucket: "casino-globo.firebasestorage.app",
-            messagingSenderId: "522798413276",
-            appId: "1:522798413276:web:0ec75ba59c8769a51b0b19"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-
-        function entrarAlSistema() {
-            const user = document.getElementById('userInput').value.trim();
-            const pass = document.getElementById('passInput').value;
-
-            if(!user || !pass) return alert("Completa todos los campos");
-
-            // Registro y verificación en Firebase
-            db.ref('usuarios/' + user).once('value', (snap) => {
-                if(!snap.exists()) {
-                    // Si es nuevo, lo registramos
-                    db.ref('usuarios/' + user).set({
-                        password: pass,
-                        saldo: 0,
-                        fechaRegistro: new Date().toLocaleString()
-                    });
-                }
+        .btn-oro { background: var(--oro); color: black; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: bold; cursor: pointer; text-transform: uppercase; margin-top: 15px; font-size: 1rem; box-shadow: 0 4px 15
