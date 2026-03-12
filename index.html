@@ -3,117 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Casino Globo Oficial VIP</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <title>GLOBO VIP - Élite Casino</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --oro: #d4af37; --oro-brillante: #f9f295; --fondo: #0c0e12; --rojo-casino: #b30000; }
-        body { background: var(--fondo); color: white; font-family: 'Roboto', sans-serif; margin: 0; overflow: hidden; height: 100vh; }
-        
-        /* Sistema de Capas */
-        .seccion { display: none; height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; position: absolute; top: 0; left: 0; z-index: 1; }
-        .activa { display: flex !important; animation: fadeIn 0.4s ease-in-out; }
-        
+        :root { --gold: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%); --dark-bg: #050505; --card-bg: #111111; --border: #222; }
+        * { box-sizing: border-box; }
+        body { background-color: var(--dark-bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; overflow-x: hidden; }
+
+        .screen { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; padding: 20px; }
+        .active { display: flex; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* HEADER */
-        .casino-header { width: 100%; position: absolute; top: 0; padding: 15px 20px; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.9); border-bottom: 2px solid var(--oro); z-index: 10; }
-        .logo-small { font-family: 'Bebas Neue'; font-size: 1.8em; color: var(--oro); margin: 0; }
-        .saldo-box { background: rgba(0,255,0,0.1); padding: 5px 15px; border-radius: 20px; border: 1px solid #00ff00; color: #00ff00; font-weight: bold; }
+        header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; border-bottom: 1px solid var(--border); background: rgba(0,0,0,0.9); position: sticky; top: 0; z-index: 100; }
+        .logo { font-family: 'Bebas Neue'; font-size: 1.8rem; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .balance-pill { background: #002200; border: 1px solid #00ff00; color: #00ff00; padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
 
-        /* REGISTRO */
-        .card-auth { background: #161920; border: 1px solid #2a2e38; padding: 35px 25px; border-radius: 24px; box-shadow: 0 20px 60px rgba(0,0,0,0.9); width: 85%; max-width: 340px; text-align: center; }
-        input { width: 100%; padding: 15px; margin: 10px 0; background: #0a0c10; border: 1px solid #3d424d; border-radius: 10px; color: white; box-sizing: border-box; font-size: 16px; }
-        .btn-gold { background: linear-gradient(135deg, var(--oro), var(--oro-brillante), var(--oro)); color: #000; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; font-size: 1.1em; }
+        .auth-card { background: var(--card-bg); border: 1px solid var(--border); padding: 40px 30px; border-radius: 30px; width: 100%; max-width: 400px; text-align: center; margin-top: 50px; }
+        .auth-card h1 { font-family: 'Bebas Neue'; font-size: 3.5rem; margin: 0; background: var(--gold); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #000; border: 1px solid var(--border); border-radius: 12px; color: white; font-size: 1rem; }
+        .btn-main { background: var(--gold); color: black; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; margin-top: 15px; transition: 0.3s; }
 
-        /* MODALES (Bienvenida y Sin Saldo) */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; backdrop-filter: blur(8px); }
-        .modal-box { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #1a1d24; border: 2px solid var(--oro); padding: 30px; border-radius: 24px; text-align: center; width: 80%; max-width: 300px; }
+        .loader-container { text-align: center; margin-top: 30vh; }
+        .spinner { width: 60px; height: 60px; border: 4px solid #111; border-top: 4px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .loader-text { font-family: 'Bebas Neue'; font-size: 1.5rem; color: #d4af37; letter-spacing: 2px; }
 
-        /* JUEGO */
-        .globo-img { width: 160px; height: 190px; background: radial-gradient(circle at 35% 30%, #ff5e5e 0%, var(--rojo-casino) 70%, #600 100%); border-radius: 50% 50% 50% 50% / 45% 45% 60% 60%; box-shadow: 0 20px 40px rgba(0,0,0,0.6); cursor: pointer; }
+        .game-card { background: linear-gradient(to bottom, #1a1a1a, #000); border: 1px solid var(--border); border-radius: 25px; padding: 30px 20px; width: 100%; max-width: 350px; text-align: center; border-bottom: 4px solid #d4af37; }
+        
+        .security-box { margin-top: 30px; background: rgba(255,255,255,0.03); border: 1px solid #222; padding: 25px; border-radius: 20px; width: 100%; max-width: 400px; }
+        .min-badge { background: #d4af37; color: black; padding: 2px 10px; border-radius: 5px; font-weight: bold; font-size: 0.8rem; margin-bottom: 10px; display: inline-block; }
+
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.98); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: var(--card-bg); border: 1px solid #d4af37; padding: 35px; border-radius: 25px; width: 100%; max-width: 350px; text-align: center; box-shadow: 0 0 30px rgba(212,175,55,0.2); }
     </style>
 </head>
 <body>
 
-    <div id="pantalla-registro" class="seccion activa">
-        <div class="card-auth">
-            <h1 style="font-family: 'Bebas Neue'; color: var(--oro); font-size: 3em; margin: 0;">GLOBO VIP</h1>
-            <h2 style="font-family: 'Bebas Neue'; color: #888;">REGISTRARTE</h2>
-            <input type="text" id="reg-user" placeholder="Usuario">
-            <input type="password" id="reg-pass" placeholder="Contraseña">
-            <button class="btn-gold" onclick="mostrarBienvenida()">CREAR CUENTA</button>
+    <div id="screen-auth" class="screen active">
+        <div class="auth-card">
+            <h1>GLOBO VIP</h1>
+            <p style="color: #888;">Acceso Exclusivo</p>
+            <input type="text" id="username" placeholder="Nombre de Usuario">
+            <input type="password" placeholder="Contraseña">
+            <button class="btn-main" onclick="startLoading('CONECTANDO AL SERVIDOR...')">ACCEDER AHORA</button>
+            <p style="font-size: 0.7rem; color: #444; margin-top: 15px;">PROTECCIÓN DE DATOS NIVEL BANCARIO</p>
         </div>
     </div>
 
-    <div id="modal-bienvenida" class="modal-overlay">
-        <div class="modal-box">
-            <h2 style="font-family: 'Bebas Neue'; color: var(--oro); font-size: 2.5em; margin: 0;">¡HOLA!</h2>
-            <p style="font-size: 1.3em; margin: 20px 0;">Bienvenido Y suerte 🍀</p>
-            <button class="btn-gold" onclick="irAMenu()">ENTRAR AL CASINO</button>
+    <div id="screen-loading" class="screen">
+        <div class="loader-container">
+            <div class="spinner"></div>
+            <div class="loader-text" id="load-msg">CARGANDO...</div>
         </div>
     </div>
 
-    <div id="pantalla-menu" class="seccion">
-        <div class="casino-header">
-            <h2 class="logo-small">MENU VIP</h2>
-            <div class="saldo-box">SALDO: $0.00</div>
-        </div>
-        <div style="background: #1e222d; border: 1px solid var(--oro); border-radius: 20px; padding: 30px; text-align: center; cursor: pointer; width: 80%; max-width: 300px;" onclick="entrarAlGlobo()">
-            <h3 style="font-family: 'Bebas Neue'; font-size: 2em; margin: 0; color: var(--oro);">🎈 JUEGO DEL GLOBO</h3>
-            <p style="color: #00ff00; margin-bottom: 0;">JUGAR AHORA</p>
-        </div>
-    </div>
+    <div id="screen-menu" class="screen">
+        <header>
+            <div class="logo">GLOBO VIP</div>
+            <div class="balance-pill">SALDO: $0.00</div>
+        </header>
 
-    <div id="pantalla-globo" class="seccion">
-        <div class="casino-header">
-            <button onclick="irAMenu()" style="background:none; border: 1px solid var(--oro); color: var(--oro); padding: 5px 15px; border-radius: 8px;">ATRÁS</button>
-            <div class="saldo-box">SALDO: $0.00</div>
-        </div>
-        <div style="font-family: 'Bebas Neue'; font-size: 4em; color: var(--oro); margin-bottom: 20px;">x1.00</div>
-        <div class="globo-img" onclick="verificarSaldo()"></div>
-        <button class="btn-gold" style="width: 250px; margin-top: 30px;" onclick="verificarSaldo()">APUESTA MÁXIMA</button>
-    </div>
-
-    <div class="modal-overlay" id="modal-saldo">
-        <div class="modal-box">
-            <h3 style="color: #ff4d4d; font-family: 'Bebas Neue'; font-size: 2em; margin: 0;">¡SIN SALDO!</h3>
-            <p>Necesitas recargar para jugar.</p>
-            <button class="btn-gold" onclick="redirigirWhatsApp()">RECARGAR POR WHATSAPP</button>
-            <p onclick="cerrarModalSaldo()" style="color: #666; margin-top: 15px; cursor:pointer;">Cerrar</p>
-        </div>
-    </div>
-
-    <script>
-        function mostrarBienvenida() {
-            if(document.getElementById('reg-user').value === "") return alert("Ingresa un usuario");
-            document.getElementById('modal-bienvenida').style.display = 'block';
-        }
-
-        function irAMenu() {
-            document.getElementById('modal-bienvenida').style.display = 'none';
-            document.getElementById('pantalla-registro').classList.remove('activa');
-            document.getElementById('pantalla-menu').classList.add('activa');
-        }
-
-        function entrarAlGlobo() {
-            document.getElementById('pantalla-menu').classList.remove('activa');
-            document.getElementById('pantalla-globo').classList.add('activa');
-        }
-
-        function verificarSaldo() {
-            document.getElementById('modal-saldo').style.display = "block";
-        }
-
-        function cerrarModalSaldo() {
-            document.getElementById('modal-saldo').style.display = "none";
-        }
-
-        function redirigirWhatsApp() {
-            const tel = "3364546172";
-            const user = document.getElementById('reg-user').value;
-            const msg = encodeURIComponent(`¡Hola! Quiero jugar, ya estoy registrado como ${user}. Deseo recargar saldo ahora mismo.`);
-            window.open(`https://wa.me/${tel}?text=${msg}`, '_blank');
-        }
-    </script>
-</body>
-</html>
+        <div style="text-align
