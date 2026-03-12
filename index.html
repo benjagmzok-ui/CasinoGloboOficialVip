@@ -8,27 +8,97 @@
     <style>
         :root { --oro: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%); }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background: #050505; color: white; font-family: 'Poppins', sans-serif; margin: 0; overflow: hidden; }
+        body { background: #000; color: white; font-family: 'Poppins', sans-serif; margin: 0; overflow: hidden; }
 
-        .seccion { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        /* Contenedores de Pantalla */
+        .seccion { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: absolute; top: 0; left: 0; }
         .visible { display: flex; }
 
-        /* Login */
-        .caja { background: #111; border: 1px solid #222; padding: 40px 25px; border-radius: 25px; width: 100%; max-width: 380px; text-align: center; }
-        .caja h1 { font-family: 'Bebas Neue'; font-size: 3.5rem; margin: 0; background: var(--oro); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        input { width: 100%; padding: 15px; margin: 10px 0; background: #000; border: 1px solid #333; border-radius: 12px; color: white; font-size: 1rem; }
+        /* Tarjeta de Acceso */
+        .caja-vip { background: #111; border: 1px solid #222; padding: 40px 25px; border-radius: 25px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .caja-vip h1 { font-family: 'Bebas Neue'; font-size: 3.5rem; margin: 0; background: var(--oro); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #000; border: 1px solid #333; border-radius: 12px; color: white; font-size: 1rem; outline: none; }
+        input:focus { border-color: #d4af37; }
 
-        /* Botón */
-        .btn { background: var(--oro); color: black; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 1rem; }
-        .btn:active { transform: scale(0.96); }
+        /* Botones */
+        .btn-principal { background: var(--oro); color: black; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; font-size: 1rem; margin-top: 10px; }
+        .btn-principal:active { transform: scale(0.95); }
 
-        .seguridad { color: #00ff00; font-size: 0.75rem; margin-top: 20px; font-weight: bold; }
+        /* Seguridad solicitada */
+        .texto-seguridad { color: #00ff00; font-size: 0.75rem; margin-top: 20px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; }
 
         /* Carga */
-        .loader { width: 45px; height: 45px; border: 4px solid #111; border-top: 4px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        .rueda { width: 40px; height: 40px; border: 4px solid #111; border-top: 4px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Menú */
-        header { width: 100%; display: flex; justify-content: space-between; padding: 15px 20px; background: #000; border-bottom: 1px solid #222; position: fixed; top: 0; }
-        .globo { width: 150px; height: 180px; background: radial-gradient(circle at 30% 30%, #ff4d4d, #800); border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%; margin: 20px auto; }
-    </
+        /* Estilo del Juego */
+        header { width: 100%; display: flex; justify-content: space-between; padding: 15px 20px; background: #000; border-bottom: 1px solid #222; position: fixed; top: 0; z-index: 10; }
+        .globo-rojo { width: 160px; height: 190px; background: radial-gradient(circle at 30% 30%, #ff4d4d, #800); border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%; margin: 30px auto; box-shadow: 0 15px 40px rgba(255,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <div id="pantalla-login" class="seccion visible">
+        <div class="caja-vip">
+            <h1>GLOBO VIP</h1>
+            <p style="color: #555; margin-top: -5px; font-weight: bold;">ACCESO ELITE</p>
+            
+            <input type="text" id="nombreUsuario" placeholder="Usuario">
+            <input type="password" placeholder="Contraseña">
+            
+            <button class="btn-principal" onclick="iniciarAcceso()">ENTRAR AL CASINO</button>
+            
+            <div class="texto-seguridad">
+                ✓ PAGO AUTOMÁTICO SEGURO VÍA TRANSFERENCIA POR SEGURIDAD
+            </div>
+        </div>
+    </div>
+
+    <div id="pantalla-carga" class="seccion">
+        <div class="rueda"></div>
+        <div style="font-family: 'Bebas Neue'; color: #d4af37; font-size: 1.5rem; letter-spacing: 2px;">INICIANDO...</div>
+    </div>
+
+    <div id="pantalla-menu" class="seccion">
+        <header>
+            <div style="font-family: 'Bebas Neue'; color:#d4af37; font-size: 1.5rem;">GLOBO VIP</div>
+            <div style="color: #00ff00; font-weight: bold; border: 1px solid #00ff00; padding: 2px 10px; border-radius: 15px;">$0.00</div>
+        </header>
+
+        <div style="text-align:center; margin-top: 60px;">
+            <h2 style="font-family: 'Bebas Neue'; font-size: 2.5rem; margin-bottom: 5px;">¡SUERTE! 🍀</h2>
+            <div class="globo-rojo"></div>
+            <p style="color: #777; font-size: 0.9rem;">Mínimo de recarga: <b>$5.000 ARS</b></p>
+            <button class="btn-principal" style="background: #25d366; color: white; width: 280px;" onclick="irWhatsApp()">CARGAR POR WHATSAPP</button>
+        </div>
+    </div>
+
+    <script>
+        function iniciarAcceso() {
+            var user = document.getElementById('nombreUsuario').value;
+            if(user.trim() === "") {
+                alert("Ingresa un usuario para continuar");
+                return;
+            }
+
+            // Cambiar pantallas manualmente para evitar errores de sistema
+            document.getElementById('pantalla-login').style.display = 'none';
+            document.getElementById('pantalla-carga').style.display = 'flex';
+
+            // Tiempo de carga fijo para evitar el error "Indefinido"
+            setTimeout(function() {
+                document.getElementById('pantalla-carga').style.display = 'none';
+                document.getElementById('pantalla-menu').style.display = 'flex';
+            }, 2500);
+        }
+
+        function irWhatsApp() {
+            var user = document.getElementById('nombreUsuario').value;
+            var numero = "3364546172";
+            var mensaje = encodeURIComponent("¡Hola! Soy " + user + ". Quiero realizar una recarga segura ($5.000 mínimo) para jugar al Globo VIP.");
+            window.open("https://wa.me/" + numero + "?text=" + mensaje, "_blank");
+        }
+    </script>
+</body>
+</html>
