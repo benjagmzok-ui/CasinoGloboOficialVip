@@ -2,18 +2,104 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GLOBO VIP - Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GLOBO VIP OFICIAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root { --gold: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%); --dark-bg: #050505; --card-bg: #111111; }
+        :root { --oro: linear-gradient(135deg, #d4af37 0%, #f9f295 50%, #d4af37 100%); --fondo: #050505; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { background-color: var(--dark-bg); color: white; font-family: 'Poppins', sans-serif; margin: 0; overflow: hidden; }
+        body { background-color: var(--fondo); color: white; font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow: hidden; }
 
-        .screen { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; padding: 20px; }
-        .active { display: flex; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Estructura de Pantallas */
+        .pantalla { display: none; min-height: 100vh; width: 100%; flex-direction: column; align-items: center; justify-content: center; padding: 20px; position: absolute; top: 0; left: 0; }
+        .activa { display: flex; }
 
-        /* Estilo del Formulario */
-        .auth-card { background: var(--card-bg); border: 1px solid #222; padding: 40px 30px; border-radius: 30px; width: 100%; max-width: 400px; text-align: center; margin-top: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .auth-
+        /* Pantalla de Registro */
+        .tarjeta-vip { background: #111; border: 1px solid #222; padding: 40px 25px; border-radius: 25px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+        .tarjeta-vip h1 { font-family: 'Bebas Neue'; font-size: 3.5rem; margin: 0; background: var(--oro); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        input { width: 100%; padding: 15px; margin: 10px 0; background: #000; border: 1px solid #333; border-radius: 12px; color: white; font-size: 1rem; outline: none; }
+        input:focus { border-color: #d4af37; }
+
+        /* Botones */
+        .btn-accion { background: var(--oro); color: black; border: none; padding: 18px; width: 100%; border-radius: 12px; font-weight: 800; cursor: pointer; text-transform: uppercase; transition: 0.2s; font-size: 1rem; }
+        .btn-accion:active { transform: scale(0.96); }
+
+        /* Mensaje de Seguridad */
+        .msj-seguridad { color: #00ff00; font-size: 0.75rem; margin-top: 20px; font-weight: bold; text-transform: uppercase; }
+
+        /* Pantalla de Carga */
+        .loader { width: 50px; height: 50px; border: 4px solid #111; border-top: 4px solid #d4af37; border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .texto-carga { font-family: 'Bebas Neue'; font-size: 1.5rem; color: #d4af37; letter-spacing: 2px; }
+
+        /* Pantalla de Menú */
+        header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #000; border-bottom: 1px solid #222; position: fixed; top: 0; }
+        .saldo { color: #00ff00; border: 1px solid #00ff00; padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.9rem; }
+        .globo-img { width: 160px; height: 190px; background: radial-gradient(circle at 30% 30%, #ff4d4d, #800); border-radius: 50% 50% 50% 50% / 45% 45% 55% 55%; margin: 30px auto; box-shadow: 0 15px 30px rgba(0,0,0,0.5); }
+    </style>
+</head>
+<body>
+
+    <div id="p-registro" class="pantalla activa">
+        <div class="tarjeta-vip">
+            <h1>GLOBO VIP</h1>
+            <p style="color: #666; margin-top: -5px;">ACCESO EXCLUSIVO</p>
+            <input type="text" id="user" placeholder="Usuario">
+            <input type="password" placeholder="Contraseña">
+            <button class="btn-accion" onclick="irACarga()">ENTRAR AL CASINO</button>
+            <div class="msj-seguridad">✓ PAGO AUTOMÁTICO SEGURO VÍA TRANSFERENCIA</div>
+        </div>
+    </div>
+
+    <div id="p-carga" class="pantalla">
+        <div class="loader"></div>
+        <div id="txt-dinamico" class="texto-carga">CONECTANDO...</div>
+    </div>
+
+    <div id="p-menu" class="pantalla">
+        <header>
+            <div style="font-family: 'Bebas Neue'; color:#d4af37; font-size: 1.4rem;">GLOBO VIP</div>
+            <div class="saldo">SALDO: $0.00</div>
+        </header>
+        <div style="text-align:center; margin-top: 80px;">
+            <h2 style="font-family: 'Bebas Neue'; font-size: 2.2rem; margin:0;">¡BIENVENIDO! 🍀</h2>
+            <div class="globo-img"></div>
+            <p style="color: #888; margin-bottom: 25px;">Recarga mínima: <b>$5.000 ARS</b></p>
+            <button class="btn-accion" style="width: 280px; background: #25d366; color: white;" onclick="irAWhatsapp()">RECARGAR POR WHATSAPP</button>
+        </div>
+    </div>
+
+    <script>
+        function irACarga() {
+            const u = document.getElementById('user').value;
+            if(u === "") return alert("Ingresa un nombre de usuario");
+
+            // Ocultar registro, mostrar carga
+            document.getElementById('p-registro').classList.remove('activa');
+            document.getElementById('p-carga').classList.add('activa');
+
+            // Mensajes de carga profesionales
+            const pasos = ["VERIFICANDO SEGURIDAD...", "SINCRONIZANDO SALDO...", "¡ACCESO CONCEDIDO!"];
+            let i = 0;
+            const intervalo = setInterval(() => {
+                document.getElementById('txt-dinamico').innerText = pasos[i];
+                i++;
+                if(i >= pasos.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        document.getElementById('p-carga').classList.remove('activa');
+                        document.getElementById('p-menu').classList.add('activa');
+                    }, 500);
+                }
+            }, 1000);
+        }
+
+        function irAWhatsapp() {
+            const u = document.getElementById('user').value;
+            const t = "3364546172"; // Tu número
+            const m = encodeURIComponent(`✨ SOLICITUD DE RECARGA GLOBO VIP ✨\n\n👤 Usuario: ${u}\n💰 Monto: Mínimo $5.000 ARS\n\nHola, quiero cargar saldo mediante transferencia segura.`);
+            window.open(`https://wa.me/${t}?text=${m}`, '_blank');
+        }
+    </script>
+</body>
+</html>
