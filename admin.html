@@ -2,37 +2,134 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANEL CONTROL VIP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SISTEMA DE GESTIÓN - GLOBO VIP</title>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
     <style>
-        :root { --oro: #d4af37; --fondo: #0a0a0a; --tarjeta: #151515; }
-        body { background: var(--fondo); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; }
+        :root { --gold: #d4af37; --bg: #050505; --card: #121212; --green: #00ff00; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px; }
         
-        .header { text-align: center; padding: 20px 0; border-bottom: 2px solid var(--oro); margin-bottom: 20px; }
-        .header h1 { margin: 0; color: var(--oro); font-size: 1.8rem; text-transform: uppercase; }
+        /* Login Estético */
+        #login-section { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; }
+        .login-card { background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--gold); text-align: center; width: 100%; max-width: 320px; }
+        
+        /* Panel Real */
+        #main-panel { display: none; }
+        .header { text-align: center; padding: 20px 0; border-bottom: 2px solid var(--gold); margin-bottom: 20px; }
+        .header h1 { color: var(--gold); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
 
         /* Buscador */
-        .search-box { width: 100%; padding: 15px; border-radius: 10px; border: 1px solid #333; background: #000; color: white; margin-bottom: 20px; box-sizing: border-box; font-size: 1rem; }
+        .search-bar { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #333; background: #000; color: white; margin-bottom: 20px; font-size: 1rem; box-sizing: border-box; }
 
-        /* Tarjeta de Usuario */
-        .usuario-card { background: var(--tarjeta); border-radius: 15px; padding: 20px; margin-bottom: 15px; border-left: 5px solid var(--oro); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .info-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .nombre { font-size: 1.2rem; font-weight: bold; color: var(--oro); }
-        .saldo-actual { font-size: 1.1rem; color: #00ff00; background: rgba(0,255,0,0.1); padding: 5px 10px; border-radius: 8px; }
+        /* Tarjeta de Usuario Profesional */
+        .user-card { background: var(--card); border-radius: 15px; padding: 20px; margin-bottom: 15px; border: 1px solid #222; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .user-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .user-name { font-size: 1.3rem; font-weight: bold; color: var(--gold); }
+        .user-balance { font-size: 1.2rem; color: var(--green); background: rgba(0,255,0,0.1); padding: 5px 12px; border-radius: 10px; font-family: monospace; }
 
-        /* Controles de Saldo */
-        .controles { display: grid; grid-template-columns: 1fr auto; gap: 10px; }
-        .input-monto { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: #fff; font-size: 1.1rem; width: 100%; box-sizing: border-box; }
-        .btn-cargar { background: var(--oro); color: black; border: none; padding: 0 20px; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 0.9rem; text-transform: uppercase; }
-        
-        #login-admin { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 80vh; }
-        #panel-real { display: none; }
+        /* Controles de Carga */
+        .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        input[type="number"] { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #000; color: white; font-size: 1.1rem; text-align: center; grid-column: span 2; }
+        .btn-action { padding: 12px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.8rem; }
+        .btn-add { background: var(--gold); color: black; }
+        .btn-reset { background: rgba(255,0,0,0.1); color: #ff4d4d; border: 1px solid #ff4d4d; }
+
+        .empty-list { text-align: center; color: #555; margin-top: 40px; }
     </style>
 </head>
 <body>
 
-    <div id="login-admin">
-        <h1 style="color: var(--oro)">ACCESO ELITE</h1>
-        <input type="password" id="passInput" class="search-box" style
+    <div id="login-section">
+        <div class="login-card">
+            <h2 style="color: var(--gold)">ADMIN ELITE</h2>
+            <input type="password" id="adminPass" class="search-bar" style="text-align:center" placeholder="CONTRASEÑA">
+            <button onclick="checkPass()" class="btn-action btn-add" style="width:100%">ENTRAR AL PANEL</button>
+        </div>
+    </div>
+
+    <div id="main-panel">
+        <div class="header">
+            <h1>GESTIÓN DE CARGAS</h1>
+            <p style="color: #666; font-size: 0.8rem;">ACTUALIZACIÓN EN VIVO</p>
+        </div>
+
+        <input type="text" id="filter" class="search-bar" placeholder="🔍 Buscar usuario (ej: Pepito)..." onkeyup="search()">
+
+        <div id="users-list">
+            <p class="empty-list">Esperando que alguien se registre...</p>
+        </div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyADFLPl2MSMaIygi80cXERqpOx86PBVpgs",
+            authDomain: "casino-globo.firebaseapp.com",
+            databaseURL: "https://casino-globo-default-rtdb.firebaseio.com",
+            projectId: "casino-globo",
+            storageBucket: "casino-globo.firebasestorage.app",
+            messagingSenderId: "522798413276",
+            appId: "1:522798413276:web:0ec75ba59c8769a51b0b19"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        function checkPass() {
+            if(document.getElementById('adminPass').value === "elnoba1212") {
+                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('main-panel').style.display = 'block';
+                startApp();
+            } else { alert("Error de Acceso"); }
+        }
+
+        function startApp() {
+            db.ref('usuarios').on('value', (snap) => {
+                const list = document.getElementById('users-list');
+                if(!snap.exists()) return;
+                list.innerHTML = "";
+                snap.forEach((child) => {
+                    const name = child.key;
+                    const val = child.val().saldo || 0;
+                    list.innerHTML += `
+                        <div class="user-card" data-name="${name.toLowerCase()}">
+                            <div class="user-header">
+                                <span class="user-name">${name}</span>
+                                <span class="user-balance">$${val.toLocaleString()}</span>
+                            </div>
+                            <div class="controls">
+                                <input type="number" id="amt-${name}" placeholder="Monto para cargar">
+                                <button class="btn-action btn-add" onclick="addCredit('${name}')">CARGAR SALDO</button>
+                                <button class="btn-action btn-reset" onclick="resetCredit('${name}')">VACIAR ($0)</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function addCredit(user) {
+            const amt = parseInt(document.getElementById('amt-' + user).value);
+            if(!amt || amt <= 0) return alert("Ingresa un monto válido");
+            
+            db.ref('usuarios/' + user + '/saldo').transaction((current) => {
+                return (current || 0) + amt;
+            });
+            document.getElementById('amt-' + user).value = "";
+            alert("✅ ¡ÉXITO! Se cargaron $" + amt + " a " + user);
+        }
+
+        function resetCredit(user) {
+            if(confirm("¿Seguro quieres poner en $0 la cuenta de " + user + "?")) {
+                db.ref('usuarios/' + user).update({ saldo: 0 });
+            }
+        }
+
+        function search() {
+            const query = document.getElementById('filter').value.toLowerCase();
+            document.querySelectorAll('.user-card').forEach(card => {
+                card.style.display = card.dataset.name.includes(query) ? "block" : "none";
+            });
+        }
+    </script>
+</body>
+</html>
